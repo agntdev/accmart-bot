@@ -40,5 +40,155 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Owner setup flow: set owner, then access admin menu",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Menu\n\nCurrency: USD\nActive listings: 0" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Add listing flow: fill all fields step by step",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "callback": "admin:add_listing" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "➕ Add New Listing\n\nSend the account title (e.g. \"US Account — 2yr old\"):" }
+          }
+        ]
+      },
+      {
+        "send": { "text": "US Account" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the country code (e.g. US, UK, DE):" }
+          }
+        ]
+      },
+      {
+        "send": { "text": "US" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the account age (e.g. 24):" }
+          }
+        ]
+      },
+      {
+        "send": { "text": "24" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the price (number):" }
+          }
+        ]
+      },
+      {
+        "send": { "text": "50" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the account credentials (username + password):" }
+          }
+        ]
+      },
+      {
+        "send": { "text": "user@example.com / pass123" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Listing added!\n\nTitle: US Account\nCountry: US\nAge: 24\nPrice: USD 50" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Admin text input during flow skips commands",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "callback": "admin:add_listing" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "➕ Add New Listing\n\nSend the account title (e.g. \"US Account — 2yr old\"):" }
+          }
+        ]
+      },
+      {
+        "send": { "text": "/start" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "👋 Welcome! Tap a button below to get started." }
+          }
+        ]
+      }
+    ]
   }
 ]

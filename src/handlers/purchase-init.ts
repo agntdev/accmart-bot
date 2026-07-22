@@ -4,6 +4,7 @@ import { inlineButton, inlineKeyboard } from "../toolkit/index.js";
 import {
   getAvailableListings,
   getListing,
+  getOrder,
   addOrder,
   updateOrder,
   updateListing,
@@ -78,7 +79,6 @@ composer.on("pre_checkout_query", async (ctx) => {
   }
 
   const orderId = data.slice(6);
-  const { getOrder } = await import("../storage.js");
   const order = await getOrder(orderId);
   if (!order) {
     await ctx.api.answerPreCheckoutQuery(ctx.preCheckoutQuery.id, false);
@@ -100,8 +100,7 @@ composer.on("message:successful_payment", async (ctx) => {
   if (!invoicePayload?.startsWith("order:")) return;
 
   const orderId = invoicePayload.slice(6);
-  const { getOrder: getOrderFn } = await import("../storage.js");
-  const order = await getOrderFn(orderId);
+  const order = await getOrder(orderId);
   if (!order) return;
 
   const listing = await getListing(order.listing_id);
