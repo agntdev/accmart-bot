@@ -3,9 +3,7 @@ import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { buildBot } from "../src/bot";
 import { resetData } from "../src/storage";
-import { formatSuiteResult, parseBotSpecs } from "../src/toolkit/harness/run-specs";
-import { runSpec } from "../src/toolkit/harness/runner";
-import type { SuiteResult } from "../src/toolkit/harness/run-specs";
+import { formatSuiteResult, parseBotSpecs, runSpecs } from "../src/toolkit/harness/run-specs";
 
 // THE PUBLISH GATE replays every tests/specs/*.json against your built bot via the
 // toolkit harness, and fails the build on any mismatch. This test runs the SAME
@@ -25,13 +23,10 @@ describe("dialog specs (the publish gate replays these)", () => {
     const specs = files.flatMap((f) =>
       parseBotSpecs(JSON.parse(readFileSync(join(SPECS_DIR, f), "utf8"))),
     );
-    const results = [];
-    for (const spec of specs) {
+    const suite = await runSpecs(async () => {
       await resetData();
-      results.push(await runSpec(await buildBot("123456:TEST"), spec));
-    }
-    const passed = results.filter((r) => r.ok).length;
-    const suite: SuiteResult = { total: results.length, passed, failed: results.length - passed, results };
+      return buildBot("123456:TEST");
+    }, specs);
     expect(suite.failed, "\n" + formatSuiteResult(suite)).toBe(0);
   });
 });
