@@ -12,5 +12,33 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Menu:main re-renders the main menu",
+    "steps": [
+      {
+        "send": { "callback": "menu:main" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "👋 Welcome! Tap a button below to get started." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Unknown message gets fallback reply",
+    "steps": [
+      {
+        "send": { "text": "hello world" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Sorry, I didn't understand that. Try /help." }
+          }
+        ]
+      }
+    ]
   }
 ]

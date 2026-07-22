@@ -9,6 +9,10 @@ const ITEMS_PER_PAGE = 8;
 
 const composer = new Composer<Ctx>();
 
+composer.callbackQuery("noop", async (ctx) => {
+  await ctx.answerCallbackQuery();
+});
+
 composer.callbackQuery("catalog:filter", async (ctx) => {
   await ctx.answerCallbackQuery();
   ctx.session.step = "catalog_browse";

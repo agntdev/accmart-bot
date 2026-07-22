@@ -6,6 +6,7 @@ import {
   getAvailableListings,
   getCurrency,
   getData,
+  getListing,
   getOwnerId,
   getOrdersByBuyer,
   removeListing,
@@ -72,7 +73,6 @@ composer.callbackQuery("admin:edit_listing", async (ctx) => {
 composer.callbackQuery(/^admin:edit_select:(.+)$/, async (ctx) => {
   await ctx.answerCallbackQuery();
   const listingId = ctx.match![1];
-  const { getListing } = await import("../storage.js");
   const listing = await getListing(listingId);
   if (!listing) {
     await ctx.editMessageText("Listing not found.", {
@@ -139,8 +139,7 @@ composer.callbackQuery("admin:remove_listing", async (ctx) => {
 composer.callbackQuery(/^admin:remove_confirm:(.+)$/, async (ctx) => {
   await ctx.answerCallbackQuery();
   const listingId = ctx.match![1];
-  const { getListing: getListingFn } = await import("../storage.js");
-  const listing = await getListingFn(listingId);
+  const listing = await getListing(listingId);
   if (!listing) {
     await ctx.editMessageText("Listing not found.", {
       reply_markup: inlineKeyboard([[inlineButton("⬅️ Back", "admin:menu")]]),
@@ -250,6 +249,8 @@ composer.on("message:text", async (ctx, next) => {
 
   const flow = ctx.session.flow;
   if (!flow) return next();
+
+  if (ctx.message.text.startsWith("/")) return next();
 
   if (step === "awaiting_listing_title" && flow.type === "add_listing") {
     flow.data = flow.data ?? {};

@@ -1,4 +1,5 @@
 import { MemorySessionStorage } from "./toolkit/session/memory.js";
+import { defaultRedisStorage } from "./toolkit/session/redis.js";
 import type { StorageAdapter } from "grammy";
 
 export interface AccountListing {
@@ -35,7 +36,14 @@ export interface DataShape {
   owner_id?: number;
 }
 
-const dataStorage: StorageAdapter<DataShape> = new MemorySessionStorage<DataShape>();
+function resolveDataStorage(): StorageAdapter<DataShape> {
+  if (typeof process !== "undefined" && process.env.REDIS_URL) {
+    return defaultRedisStorage<DataShape>(process.env.REDIS_URL);
+  }
+  return new MemorySessionStorage<DataShape>();
+}
+
+const dataStorage: StorageAdapter<DataShape> = resolveDataStorage();
 
 const defaultData: DataShape = {
   listings: [],

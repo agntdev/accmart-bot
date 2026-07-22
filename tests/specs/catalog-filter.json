@@ -40,5 +40,60 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Filter by age shows empty state",
+    "steps": [
+      {
+        "send": { "callback": "catalog:set_age:18-25" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "No listings match your filters.\n\nTry adjusting your filters or check back later." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Filter by price shows empty state",
+    "steps": [
+      {
+        "send": { "callback": "catalog:set_price:under50" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "No listings match your filters.\n\nTry adjusting your filters or check back later." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Noop callback on filter header does not crash",
+    "steps": [
+      {
+        "send": { "callback": "noop" },
+        "expect": [
+          {
+            "method": "answerCallbackQuery"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "View nonexistent listing shows unavailable",
+    "steps": [
+      {
+        "send": { "callback": "catalog:view:nonexistent" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "That listing is no longer available." }
+          }
+        ]
+      }
+    ]
   }
 ]

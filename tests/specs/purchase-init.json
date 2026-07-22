@@ -12,5 +12,56 @@
         ]
       }
     ]
+  },
+  {
+    "name": "Successful payment with non-existent order silently ignores",
+    "steps": [
+      {
+        "send": {
+          "update": {
+            "update_id": 1,
+            "message": {
+              "message_id": 1,
+              "date": 0,
+              "chat": { "id": 1, "type": "private" },
+              "from": { "id": 1, "is_bot": false, "first_name": "Test" },
+              "successful_payment": {
+                "currency": "USD",
+                "total_amount": 1000,
+                "invoice_payload": "order:NONEXISTENT-ORDER",
+                "telegram_payment_charge_id": "charge_test_123",
+                "provider_payment_charge_id": "provider_test_123"
+              }
+            }
+          }
+        },
+        "expect": []
+      }
+    ]
+  },
+  {
+    "name": "Pre-checkout query with non-existent order is rejected",
+    "steps": [
+      {
+        "send": {
+          "update": {
+            "update_id": 2,
+            "pre_checkout_query": {
+              "id": "precheckout_test_123",
+              "from": { "id": 1, "is_bot": false, "first_name": "Test" },
+              "currency": "USD",
+              "total_amount": 1000,
+              "invoice_payload": "order:NONEXISTENT-ORDER"
+            }
+          }
+        },
+        "expect": [
+          {
+            "method": "answerPreCheckoutQuery",
+            "payload": { "ok": false }
+          }
+        ]
+      }
+    ]
   }
 ]

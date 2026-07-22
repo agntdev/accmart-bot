@@ -12,5 +12,19 @@
         ]
       }
     ]
+  },
+  {
+    "name": "My Purchases with Browse Catalog button",
+    "steps": [
+      {
+        "send": { "callback": "purchases:view" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "📋 No purchases yet.\n\nBrowse the catalog to find an account." }
+          }
+        ]
+      }
+    ]
   }
 ]
