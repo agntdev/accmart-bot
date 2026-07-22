@@ -1,0 +1,20 @@
+[
+  {
+    "name": "/admin",
+    "steps": [
+      {
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": {
+              "text": "Open admin menu for owner-only actions"
+            }
+          }
+        ],
+        "send": {
+          "text": "/admin"
+        }
+      }
+    ]
+  }
+]
