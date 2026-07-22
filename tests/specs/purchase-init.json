@@ -1,19 +1,15 @@
 [
   {
-    "name": "Buy",
+    "name": "Buy with nonexistent listing shows error",
     "steps": [
       {
+        "send": { "callback": "purchase:init:nonexistent" },
         "expect": [
           {
-            "method": "sendMessage",
-            "payload": {
-              "text": "Initiate purchase flow for selected account listing"
-            }
+            "method": "editMessageText",
+            "payload": { "text": "Sorry, that listing is no longer available." }
           }
-        ],
-        "send": {
-          "callback": "purchase:init"
-        }
+        ]
       }
     ]
   }
