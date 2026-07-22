@@ -1,0 +1,276 @@
+[
+  {
+    "name": "/set_admin_id rejects non-owner",
+    "steps": [
+      {
+        "send": { "text": "/set_admin_id" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "You don't have access to admin controls." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Change admin ID text alias rejects non-owner",
+    "steps": [
+      {
+        "send": { "text": "Change admin ID" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "You don't have access to admin controls." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "/set_admin_id prompts for new admin ID",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "/set_admin_id" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the new admin Telegram ID (numeric) or 'cancel'." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Change admin ID text alias prompts for new admin ID",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "Change admin ID" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the new admin Telegram ID (numeric) or 'cancel'." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Invalid admin ID input shows error and re-prompts",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "/set_admin_id" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the new admin Telegram ID (numeric) or 'cancel'." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "abc" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Please send a valid numeric Telegram user ID." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Valid admin ID sets and shows confirmation",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "/set_admin_id" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the new admin Telegram ID (numeric) or 'cancel'." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "999999" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Admin ID set to 999999." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Change admin ID shows old and new IDs on update",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "/set_admin_id" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the new admin Telegram ID (numeric) or 'cancel'." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "111" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Admin ID set to 111." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "Change admin ID" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Current admin ID: 111\n\nSend the new admin Telegram ID (numeric) or 'cancel'." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "222" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Admin ID updated.\n\nOld: 111\nNew: 222" }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Cancel during set_admin_id flow cancels operation",
+    "steps": [
+      {
+        "send": { "callback": "admin:menu" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "⚙️ Admin Setup\n\nFirst, send your Telegram user ID to set as owner.\nYou can find it via @userinfobot." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "1" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "✅ Owner set to 1." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "/set_admin_id" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Send the new admin Telegram ID (numeric) or 'cancel'." }
+          }
+        ]
+      },
+      {
+        "send": { "text": "cancel" },
+        "expect": [
+          {
+            "method": "sendMessage",
+            "payload": { "text": "Cancelled." }
+          }
+        ]
+      }
+    ]
+  }
+]

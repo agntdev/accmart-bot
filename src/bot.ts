@@ -8,7 +8,7 @@ import type { StorageAdapter } from "grammy";
 export interface Session {
   step?: string;
   flow?: {
-    type: "add_listing" | "edit_listing" | "remove_listing" | "set_currency" | "set_owner" | "view_sales" | "catalog_browse" | "purchase";
+    type: "add_listing" | "edit_listing" | "remove_listing" | "set_currency" | "set_owner" | "set_admin_id" | "view_sales" | "catalog_browse" | "purchase";
     data?: Record<string, unknown>;
     page?: number;
     filters?: { country?: string; age?: string; price_min?: number; price_max?: number };

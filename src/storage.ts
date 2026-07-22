@@ -27,6 +27,13 @@ export interface BuyerProfile {
   purchase_history: string[];
 }
 
+export interface AuditLogEntry {
+  action: string;
+  performed_by: number;
+  timestamp: number;
+  details: string;
+}
+
 export interface DataShape {
   listings: AccountListing[];
   orders: Order[];
@@ -34,6 +41,8 @@ export interface DataShape {
   listingIndex: string[];
   currency: string;
   owner_id?: number;
+  admin_id?: number;
+  admin_audit_log: AuditLogEntry[];
 }
 
 function resolveDataStorage(): StorageAdapter<DataShape> {
@@ -43,7 +52,11 @@ function resolveDataStorage(): StorageAdapter<DataShape> {
   return new MemorySessionStorage<DataShape>();
 }
 
-const dataStorage: StorageAdapter<DataShape> = resolveDataStorage();
+let dataStorage: StorageAdapter<DataShape> = resolveDataStorage();
+
+export function resetDataStore(): void {
+  dataStorage = resolveDataStorage();
+}
 
 const defaultData: DataShape = {
   listings: [],
@@ -51,6 +64,7 @@ const defaultData: DataShape = {
   buyers: [],
   listingIndex: [],
   currency: "USD",
+  admin_audit_log: [],
 };
 
 export async function getData(): Promise<DataShape> {
@@ -160,4 +174,26 @@ export async function getOwnerId(): Promise<number | undefined> {
 
 export async function resetData(): Promise<void> {
   await dataStorage.delete("data");
+}
+
+export async function getAdminId(): Promise<number | undefined> {
+  const data = await getData();
+  return data.admin_id;
+}
+
+export async function setAdminId(id: number): Promise<void> {
+  const data = await getData();
+  data.admin_id = id;
+  await setData(data);
+}
+
+export async function addAuditLogEntry(entry: AuditLogEntry): Promise<void> {
+  const data = await getData();
+  data.admin_audit_log.push(entry);
+  await setData(data);
+}
+
+export async function getAdminAuditLog(): Promise<AuditLogEntry[]> {
+  const data = await getData();
+  return data.admin_audit_log;
 }
