@@ -2,7 +2,7 @@ import { describe, expect, it } from "vitest";
 import { existsSync, readdirSync, readFileSync } from "fs";
 import { join } from "path";
 import { buildBot } from "../src/bot";
-import { resetData } from "../src/storage";
+import { resetDataStore } from "../src/storage";
 import { formatSuiteResult, parseBotSpecs, runSpecs } from "../src/toolkit/harness/run-specs";
 
 // THE PUBLISH GATE replays every tests/specs/*.json against your built bot via the
@@ -24,7 +24,7 @@ describe("dialog specs (the publish gate replays these)", () => {
       parseBotSpecs(JSON.parse(readFileSync(join(SPECS_DIR, f), "utf8"))),
     );
     const suite = await runSpecs(async () => {
-      await resetData();
+      resetDataStore();
       return buildBot("123456:TEST");
     }, specs);
     expect(suite.failed, "\n" + formatSuiteResult(suite)).toBe(0);
