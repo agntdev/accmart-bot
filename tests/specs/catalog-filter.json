@@ -1,19 +1,43 @@
 [
   {
-    "name": "Browse Catalog",
+    "name": "Browse Catalog opens filter view",
     "steps": [
       {
+        "send": { "callback": "catalog:filter" },
         "expect": [
           {
-            "method": "sendMessage",
-            "payload": {
-              "text": "Open catalog filters for country, age range, and price range"
-            }
+            "method": "editMessageText",
+            "payload": { "text": "🌐 Browse Catalog\n\nFilter by country, age, or price — then tap a listing to view details." }
           }
-        ],
-        "send": {
-          "callback": "catalog:filter"
-        }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "View all shows empty state when no listings",
+    "steps": [
+      {
+        "send": { "callback": "catalog:view_all" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "No listings match your filters.\n\nTry adjusting your filters or check back later." }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "name": "Filter by country shows empty state",
+    "steps": [
+      {
+        "send": { "callback": "catalog:set_country:US" },
+        "expect": [
+          {
+            "method": "editMessageText",
+            "payload": { "text": "No listings match your filters.\n\nTry adjusting your filters or check back later." }
+          }
+        ]
       }
     ]
   }
